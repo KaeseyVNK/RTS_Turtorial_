@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e0494c37c20db94e994c1fad78446de, type: 3}
+  m_Name: Database
+  m_EditorClassIdentifier: 
+  objectsData:
+  - <Name>k__BackingField: CommandCenter
+    <ID>k__BackingField: 0
+    description: 
+    <Size>k__BackingField: {x: 3, y: 3}
+    <Prefab>k__BackingField: {fileID: 6941607846656432622, guid: 7fed61d6679668245ae5ac8867357989,
+      type: 3}
+    <requirements>k__BackingField: []
+    <benefits>k__BackingField: []

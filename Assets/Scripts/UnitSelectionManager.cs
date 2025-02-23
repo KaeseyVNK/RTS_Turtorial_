@@ -115,9 +115,31 @@ public class UnitSelectionManager : MonoBehaviour
             }
         }
 
+        CursorSeclector();
+    }
 
+    private void CursorSeclector()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
+        RaycastHit hit;
 
+        if(Physics.Raycast(ray, out hit, Mathf.Infinity, clickable))
+        {
+            CursorManager.Instance.SetMarkerType(CursorManager.CursorType.Selectable);
+        }
+        else if (Physics.Raycast(ray, out hit, Mathf.Infinity, attackable) && unitSelected.Count > 0 && AtleastOneOffensiveUnit(unitSelected)) 
+        {
+            CursorManager.Instance.SetMarkerType(CursorManager.CursorType.Attackable);
+
+        } else if (Physics.Raycast(ray, out hit, Mathf.Infinity, ground) && AtleastOneOffensiveUnit(unitSelected))
+        {
+            CursorManager.Instance.SetMarkerType(CursorManager.CursorType.Walkable);
+        }
+        else
+        {
+            CursorManager.Instance.SetMarkerType(CursorManager.CursorType.None);
+        }
     }
 
     private bool AtleastOneOffensiveUnit(List<GameObject> unitSelected)
@@ -179,7 +201,7 @@ public class UnitSelectionManager : MonoBehaviour
 
     private void TriggerSelectionIndicator(GameObject unit, bool isVisible)
     {
-        unit.transform.GetChild(0).gameObject.SetActive(isVisible);
+        unit.transform.Find("Indicator").gameObject.SetActive(isVisible);
     }
 
     internal void DragSelect(GameObject unit)

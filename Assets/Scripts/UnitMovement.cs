@@ -11,10 +11,14 @@ public class UnitMovement : MonoBehaviour
 
     public bool isCommandedToMove;
 
+    DirectionIndicator directionIndicator;
+
     public void Start()
     {
         cam = Camera.main;
         agent = GetComponent<NavMeshAgent>();
+
+        directionIndicator = GetComponent<DirectionIndicator>();
     }
 
     public void Update()
@@ -28,6 +32,8 @@ public class UnitMovement : MonoBehaviour
             {
                 isCommandedToMove = true;
                 agent.SetDestination(hit.point);
+
+                directionIndicator.DrawLine(hit);
             }
         }
 
@@ -36,6 +42,5 @@ public class UnitMovement : MonoBehaviour
         {
             isCommandedToMove = false;
         }
-
     }
 }

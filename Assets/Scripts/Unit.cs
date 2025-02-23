@@ -10,6 +10,10 @@ public class Unit : MonoBehaviour
 
     public HealthTracker healthTracker;
     
+    Animator animator;
+
+    UnityEngine.AI.NavMeshAgent agentMeshAgent;
+
     private void Start()
     {
         UnitSelectionManager.Instance.allUnitList.Add(gameObject);
@@ -17,6 +21,10 @@ public class Unit : MonoBehaviour
         unitHealth = unitMaxHealth;
 
         UpdateHealthUI();
+
+        animator = GetComponent<Animator>();
+
+        agentMeshAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
     }
 
     private void OnDestroy()
@@ -43,5 +51,16 @@ public class Unit : MonoBehaviour
     {
         unitHealth -= damageToInflict; 
         UpdateHealthUI();
+    }
+
+    private void Update(){
+        if (agentMeshAgent.remainingDistance > agentMeshAgent.stoppingDistance)
+        {
+            animator.SetBool("isMoving", true);
+        }
+        else
+        {
+            animator.SetBool("isMoving", false);
+        }
     }
 }
