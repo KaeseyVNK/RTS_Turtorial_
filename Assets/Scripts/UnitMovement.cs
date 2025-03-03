@@ -23,7 +23,7 @@ public class UnitMovement : MonoBehaviour
 
     public void Update()
     {
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(1) && IsMovingPossible()  )
         {
             RaycastHit hit;
             Ray ray = cam.ScreenPointToRay(Input.mousePosition);
@@ -31,16 +31,33 @@ public class UnitMovement : MonoBehaviour
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, ground))
             {
                 isCommandedToMove = true;
+                StartCoroutine(NoCommanded());
+
                 agent.SetDestination(hit.point);
+
+                // play the unit command sound
+                SoundManager.Instance.PlayUnitCommandSound();
 
                 directionIndicator.DrawLine(hit);
             }
         }
 
         //agent reached destination
-        if (agent.hasPath == false || agent.remainingDistance <= agent.stoppingDistance)
-        {
-            isCommandedToMove = false;
-        }
+        // if (agent.hasPath == false || agent.remainingDistance <= agent.stoppingDistance)
+        // {
+        //     isCommandedToMove = false;
+        // }
+    }
+
+
+    IEnumerator NoCommanded()
+    {
+        yield return new WaitForSeconds(1f);
+        isCommandedToMove = false;
+    }
+
+    private bool IsMovingPossible()
+    {
+        return CursorManager.Instance.currentCursor != CursorManager.CursorType.UnAvailable;
     }
 }

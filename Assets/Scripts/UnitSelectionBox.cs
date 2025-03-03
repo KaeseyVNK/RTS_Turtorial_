@@ -16,6 +16,7 @@ public class UnitSelectionBox : MonoBehaviour
 
     private void Start()
     {
+        boxVisual.gameObject.SetActive(true);
         myCam = Camera.main;
         startPosition = Vector2.zero;
         endPosition = Vector2.zero;
@@ -51,6 +52,8 @@ public class UnitSelectionBox : MonoBehaviour
         // When Releasing
         if (Input.GetMouseButtonUp(0))
         {
+            UnitSelectionManager.Instance.playedDuringThisDrag = false;
+            
             SelectUnits();
 
             startPosition = Vector2.zero;

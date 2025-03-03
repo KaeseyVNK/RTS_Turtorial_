@@ -13,7 +13,7 @@ public class UnitSelectionManager : MonoBehaviour
 
     public LayerMask clickable;
     public LayerMask ground;
-
+    public LayerMask constructable;
 
     public LayerMask attackable;
     public bool attackCursorVisible;
@@ -21,6 +21,8 @@ public class UnitSelectionManager : MonoBehaviour
     public GameObject groundMarker;
 
     private Camera cam;
+
+    public bool playedDuringThisDrag = false;
 
     public void Awake()
     {
@@ -128,11 +130,20 @@ public class UnitSelectionManager : MonoBehaviour
         {
             CursorManager.Instance.SetMarkerType(CursorManager.CursorType.Selectable);
         }
+        else if( ResourceManager.Instance.placementSystem.isSellMode )
+        {
+            CursorManager.Instance.SetMarkerType(CursorManager.CursorType.SellCursor);
+        }
         else if (Physics.Raycast(ray, out hit, Mathf.Infinity, attackable) && unitSelected.Count > 0 && AtleastOneOffensiveUnit(unitSelected)) 
         {
             CursorManager.Instance.SetMarkerType(CursorManager.CursorType.Attackable);
 
-        } else if (Physics.Raycast(ray, out hit, Mathf.Infinity, ground) && AtleastOneOffensiveUnit(unitSelected))
+        }
+        else if (Physics.Raycast(ray, out hit, Mathf.Infinity, constructable) && unitSelected.Count > 0)
+        {
+            CursorManager.Instance.SetMarkerType(CursorManager.CursorType.UnAvailable);
+        }
+         else if (Physics.Raycast(ray, out hit, Mathf.Infinity, ground) && unitSelected.Count > 0)
         {
             CursorManager.Instance.SetMarkerType(CursorManager.CursorType.Walkable);
         }
@@ -146,7 +157,7 @@ public class UnitSelectionManager : MonoBehaviour
     {
         foreach (GameObject unit in unitSelected)
         {
-            if (unit.GetComponent<AttackController>())
+            if (unit != null && unit.GetComponent<AttackController>())
             {
                 return true;
             }
@@ -201,6 +212,15 @@ public class UnitSelectionManager : MonoBehaviour
 
     private void TriggerSelectionIndicator(GameObject unit, bool isVisible)
     {
+
+        GameObject indicator = unit.transform.Find("Indicator").gameObject;
+
+        if(!indicator.activeInHierarchy && playedDuringThisDrag == false)
+        {
+            SoundManager.Instance.PlayUnitSelectionSound();
+            playedDuringThisDrag = true;
+        }
+        
         unit.transform.Find("Indicator").gameObject.SetActive(isVisible);
     }
 
